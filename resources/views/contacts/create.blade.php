@@ -40,46 +40,46 @@
     </div>
     <div class="form-group">
       <label for="name">Name</label>
-      <input type="text" class="form-control" id="name">
+      <input type="text" class="form-control" name="name" id="name">
     </div>
   <div class="form-group">
     <label for="address">Address</label>
-    <input type="text" class="form-control" id="address">
+    <input type="text" class="form-control" name="address" id="address">
   </div>
   <div class="form-row">
     <div class="form-group col-md-6">
       <label for="city">City</label>
-      <input type="text" class="form-control" id="city">
+      <input type="text" class="form-control" name="city" id="city">
     </div>
     <div class="form-group col-md-4">
       <label for="state">State</label>
-      <select id="state" class="form-control">
+      <select id="state" name="state" class="form-control">
         <option selected>Choose...</option>
         <option>...</option>
       </select>
     </div>
     <div class="form-group col-md-2">
       <label for="zipcode">Zip</label>
-      <input type="text" class="form-control" id="zipcode">
+      <input type="text" class="form-control" name="zipcode" id="zipcode">
     </div>
   </div>
   <div class="form-row">
     <div class="form-group col-md-4">
       <label for="phone">Phone</label>
-      <input type="text" class="form-control" id="phone">
+      <input type="text" class="form-control" name="phone" id="phone">
     </div>
     <div class="form-group col-md-8">
       <label for="email">Email</label>
-      <input type="text" class="form-control" id="email">
+      <input type="text" class="form-control" name="email" id="email">
     </div>
   </div>
   <div class="form-group">
       <label for="contact">Contact</label>
-      <input type="text" class="form-control" id="contact">
+      <input type="text" class="form-control" name="contact" id="contact">
   </div>
   <div class="form-group">
       <label for="notes">Notes</label>
-      <textarea class="form-control" id="notes" rows="3"></textarea>
+      <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
   </div>
 </div>
                 <!-- /.card-body -->

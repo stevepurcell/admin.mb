@@ -14,7 +14,7 @@
           <img src="{{ asset('img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+          <a href="#" class="d-block">{{ Auth::user()->name }}</a>
         </div>
       </div>
 
@@ -62,6 +62,18 @@
                 Gear Checklists
               </p>
             </a>
+          </li>
+          <li class="nav-item border-secondary border-top">
+            <a class="dropdown-item mt-2" href="{{ route('logout') }}"
+                onclick="event.preventDefault();
+                      document.getElementById('logout-form').submit();">
+                      <i class="nav-icon fas fa-sign-out-alt"></i>
+                      {{ __('Logout') }}
+            </a>
+
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                @csrf
+            </form>
           </li>
         </ul>
       </nav>

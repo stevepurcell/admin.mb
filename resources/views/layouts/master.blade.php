@@ -13,7 +13,7 @@
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
 
-  
+    @include('partials.flash')
     @include('partials.topnav')
     @include('partials.sidebar')
 

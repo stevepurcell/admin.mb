@@ -36,7 +36,33 @@ class ContactsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validate form date
+         $this->validate($request, [
+            'name' => 'required | max:255',
+        ]);
+
+        // Process data and submit
+        $contact = new Contact();
+        $contact->type_id = $request->type_id;
+        $contact->name = $request->name;
+        $contact->address = $request->address;
+        $contact->city = $request->city;
+        $contact->state = $request->state;
+        $contact->zipcode = $request->zipcode;
+        $contact->phone = $request->phone;
+        $contact->email = $request->email;
+        $contact->contact = $request->contact;
+        $contact->notes = $request->notes;
+        
+        
+        
+
+        // If successful, redirect to show method
+        if($contact->save()) {
+            return redirect()->route('contacts.index')->with('success' , 'Contact created successfully');
+        } else {
+            return redirect()->route('contacts.create')->with('error' , 'Error creating Contact');
+        }
     }
 
     /**
