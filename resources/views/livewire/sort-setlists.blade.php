@@ -1,11 +1,3 @@
-@extends('layouts.master')
-
-@section('content')
-<div id="app">
-    <main class="py-4">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-12">
 <div class="card">
     <div class="card-header bg-light">
         <div class="d-flex justify-content-between">
@@ -14,68 +6,31 @@
                 <i class="nav-icon far fa-hand-point-left"></i>  Back</a>
         </div>
     </div>
-      <!-- /.card-header -->
       <div class="card-body">
-        <table class="table">
-          <thead>
-            <tr>
-                <th></th>
-                <th>Title</th>
-                <th>Artist</th>
-                <th>Status</th>
-                <th>Status</th>
+    <table class="table mt-4">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Artist</th>
+            <th>Time</th>
+            <th>Status</th>
+
+        </tr>
+        </thead>
+        <tbody wire:sortable="updateOrder">
+        @forelse ($songs as $song)
+            <tr wire:sortable.item="{{ $song->id }}" wire:key="product-{{ $song->id }}">
+                <td>{{ $song->position }} - {{ $song->song->name }}</td>
+                <td>{{ $song->song->artist }}</td>
+                <td>{{ $song->song->time }} minutes</td>
+                <td><span class="badge badge-{{ $song->song->status->style }}">{{ $song->song->status->name }}</span></td>
             </tr>
-          </thead>
-            <tbody>
-                @forelse ($songs as $song)
-                    <tr>
-                    {{ $song->position }}
-                        <td>
-                        @if ($song->position > 1)
-                            <a wire:click.prevent="song_up({{ $song->id }})" href="#">
-                                &uarr;
-                            </a>
-                        @endif
-                    
-                        @if ($song->position < $songs->max('position'))
-                            <a wire:click.prevent="song_down({{ $song->id }})" href="#">
-                                &darr;
-                            </a>
-                        @endif
-                        </td>
-                        <td>{{ $song->song->name }}</td>
-                        <td>{{ $song->song->artist }}</td>
-                        <td>{{ $song->song->status_id }}</td>
-                        <td> <button class="btn btn-sm btn-primary"
-                            wire:click.prevent="lw_test()">Edit</button>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="3">No products found.</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-      </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-          </div>
-        </div>
-        <!-- /.row -->
-                </div>
+        @empty
+            <tr>
+                <td colspan="3">No songs found.</td>
+            </tr>
+        @endforelse
+        </tbody>
+    </table>
 </div>
-    
-    </div>
-</div>
-
-</div>
-            </div>
-        </div>
-    </main>
-@endsection
-
-
-
 

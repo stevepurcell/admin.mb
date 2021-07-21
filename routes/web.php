@@ -39,5 +39,4 @@ Route::group(['middleware' => 'auth'], function () {
     // Songs
     Route::get('/', [\App\Http\Controllers\SongController::class, 'index'])->name('songs');
     
-
 });

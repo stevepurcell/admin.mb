@@ -12,6 +12,7 @@ class SortSetlists extends Component
 
     public function render()
     {
+        logger('Into SortSetlists');
         return view('livewire.sort-setlists', [
             'songs' => $this->read(),
         ]);
@@ -20,20 +21,20 @@ class SortSetlists extends Component
     public function read()
     {
         return SongSonglist::where('songlist_id', $this->listid)->orderBy('position', 'asc')->get();
-        //return Song::orderBy('name', 'asc')->get();
     }
 
     public function updateOrder($list)
     {
         foreach($list as $item) {
-            //dump($item);
-            SongSonglist::find($item['value'])->update(['position' => $item['position']]);
+            SongSonglist::find($item['value'])->update(['position' => $item['order']]);
         }
     }
 
+
     public function song_up($songsonglist_id)
     {
-        dd($songsonglist);
+        logger('Song up');
+        
         $songsonglist = SongSonglist::find($songsonglist_id);
         if ($songsonglist) {
             SongSonglist::where('position', $songsonglist->position - 1)
@@ -44,17 +45,12 @@ class SortSetlists extends Component
 
     public function song_down($songsonglist_id)
     {
-        dd($songsonglist);
+        logger('Song down');
         $song = song::find($songsonglist_id);
         if ($songsonglist) {
             SongSonglist::where('position', $songsonglist->position + 1)
                 ->update(['position' => $songsonglist->position]);
             $songsonglist->update(['position' => $songsonglist->position + 1]);
         }
-    }
-
-    public function lw_test()
-    {
-        dd("LW Test");
     }
 }

@@ -11,7 +11,7 @@ class Contact extends Model
     use HasFactory, SoftDeletes;
     
     protected $fillable = [
-        'type_id',
+        'contact_type_id',
         'name',
         'address',
         'city',
@@ -22,4 +22,8 @@ class Contact extends Model
         'contact',
         'notes',
     ];
+
+    public function contact_type() {
+        return $this->belongsTo(ContactType::class);
+    }
 }

@@ -2,14 +2,13 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Song;
-use App\Models\Status;
-use App\Models\Member;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
+use App\Models\Contact;
+use App\Models\ContactType;
 use Livewire\Component;
+use Illuminate\Support\Str;
 use Livewire\WithPagination;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
 class Contacts extends Component
 {
@@ -28,9 +27,9 @@ class Contacts extends Component
     public $phone;
     public $email;
     public $contact;
-    public $type_id;
+    public $contact_type_id;
     public $notes;
-    public $contact;
+    public $contactrec;
 
     public function rules()
     {
@@ -57,7 +56,7 @@ class Contacts extends Component
     public function create()
     {
         $this->validate();
-        Song::create($this->modelData());
+        Contact::create($this->modelData());
         $this->showModal = false;
         $this->reset();
     }
@@ -65,35 +64,36 @@ class Contacts extends Component
     public function read()
     {
         if ($this->displayStatus == 0) {
-            return Song::orderBy($this->sortColumn, $this->sortDirection)->with('user')->with('status')->get();
+             return Contact::orderBy($this->sortColumn, $this->sortDirection)
+                ->with('contact_type')
+                ->get();
         }
-        else {
-            return Song::orderBy($this->sortColumn, $this->sortDirection)
-                    ->with('user')
-                    ->with('status')
-                    ->where('status_id', $this->displayStatus)
-                    ->get();   
+         else {
+            return Contact::orderBy($this->sortColumn, $this->sortDirection)
+                ->with('contact_type')
+                ->where('contact_type_id', $this->displayStatus)
+                ->get();   
         }
         
     }
 
-    public function edit($songId)
+    public function edit($contactId)
     {
         $this->showModal = true;
-        $this->songId = $songId;
-        $this->song = Song::find($songId);
+        $this->contactId = $contactId;
+        $this->contactrec = Contact::find($contactId);
     }
 
     public function update()
     {
         $this->validate();
-        Song::find($this->songId)->update($this->modelData());
+        Contact::find($this->contactId)->update($this->modelData());
         $this->showModal = false;
     }
 
     public function delete()
     {
-        Song::destroy($this->songId);
+        Contact::destroy($this->contactId);
         $this->showDeleteModal = false;
         //$this->resetPage();
     }
@@ -109,30 +109,30 @@ class Contacts extends Component
     {
         $this->resetValidation();
         $this->reset();
-        $this->songId = $id;
+        $this->contactId = $id;
         $this->showModal = true;
         $this->loadModel();
     }
 
     public function deleteShowModal($id)
     {
-        $this->songId = $id;
+        $this->ContactId = $id;
         $this->showDeleteModal = true;
     }
 
     public function loadModel()
     {
-        $data = Song::find($this->songId);
+        $data = Contact::find($this->contactId);
         $this->name = $data->name;
-        $this->artist = $data->artist;
-        $this->time = $data->time;
-        $this->singer = $data->singer;
-        $this->solo = $data->solo;
-        $this->keyboard = $data->keyboard;
-        $this->acoustic = $data->acoustic;
+        $this->address = $data->address;
+        $this->city = $data->city;
+        $this->state = $data->state;
+        $this->zipcode = $data->zipcode;
+        $this->phone = $data->phone;
+        $this->email = $data->email;
         $this->notes = $data->notes;
-        $this->status_id = $data->status_id;
-        $this->created_by = $data->created_by;
+        $this->contact_type_id = $data->contact_type_id;
+        $this->contact = $data->contact;
         //$this->created_by = Auth::user()->id;
         
     }
@@ -141,15 +141,15 @@ class Contacts extends Component
     {
         return [
             'name' => $this->name,
-            'artist' => $this->artist,
-            'time' => $this->time,
-            'singer' => $this->singer,
-            'solo' => $this->solo,
-            'keyboard' => $this->keyboard,
-            'acoustic' => $this->acoustic,
+            'address' => $this->address,
+            'city' => $this->city,
+            'state' => $this->state,
+            'zipcode' => $this->zipcode,
+            'phone' => $this->phone,
+            'email' => $this->email,
             'notes' => $this->notes,
-            'status_id' => $this->status_id,
-            'created_by' => Auth::user()->id,
+            'type_id' => $this->type_id,
+            'contact' => $this->contact,
         ];
     }
 
@@ -175,10 +175,9 @@ class Contacts extends Component
 
     public function render()
     {
-        return view('livewire.songs', [
+        return view('livewire.contacts', [
             'data' => $this->read(),
-            'bands' => Member::all(),
-            'statuses' => Status::all(),
+            'contacttypes' => ContactType::all(),
         ]);
     }
 }
