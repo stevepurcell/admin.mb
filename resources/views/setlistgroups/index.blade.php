@@ -27,22 +27,36 @@
   <tbody>
         @forelse ($data as $item)
             <tr>
-                <td><a href="setlists/create/{{ $item->id }}" class="btn btn-sm btn-secondary">
+                <td><a href="setlists/create/{{ $item->id }}" class="btn btn-success">
                         Add Setlist</a></td>
 
             <td>{{ $item->name }}</td>
             <td>{{ getUsername($item->creator) }}</td>
             <td class="">
-                    <button class="btn btn-sm btn-primary">Edit</button>
-                    <button class="btn btn-sm btn-danger">Delete</button>
+                <form action="{{ route('setlistgroups.destroy',$item->id) }}" method="POST">   
+                    <button class="btn btn-primary">Edit</button>
+                    @csrf
+                    @method('DELETE')      
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
                 </td>
             </tr>
             @foreach($item->songlists as $songlist)
                 <tr height="12px">
-                <td></td>
-                    <td class="h6"><small><a href="/setlists/{{ $songlist->id }}">
-                        {{ $songlist->name }}</a></small></td>
+                    <td><a class="btn btn-sm btn-secondary" <a href="/setlists/report/{{ $songlist->id }}">Print</a></td>
+                    <td class="h6"><small>{{ $songlist->name }}</small></td>
                     <td class="h6"><small>{{ getSongCount($songlist->id) }} Songs</small></td>
+                    <td class="">
+                        <div class="btn-group">
+                            <form action="{{ route('setlists.destroy',$songlist->id) }}" method="POST">   
+                                <a class="btn btn-sm btn-success" href="{{ route('setlists.sort', $songlist->id) }}">Sort</a>
+                                <a class="btn btn-sm btn-primary" href="{{ route('setlists.edit',$songlist->id) }}">Edit</a>   
+                                    @csrf
+                                    @method('DELETE')      
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </td>
                 </tr>
             @endforeach
         @empty

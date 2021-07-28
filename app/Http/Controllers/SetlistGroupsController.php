@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Songlist;
 use App\Models\SongListGroup;
+use App\Models\SongSonglist;
 use Illuminate\Http\Request;
 
 class SetlistGroupsController extends Controller
@@ -46,9 +48,11 @@ class SetlistGroupsController extends Controller
 
         // If successful, redirect to show method
         if($group->save()) {
-            return redirect()->route('setlistgroups.index')->with('success' , 'Setlist Group created successfully');;
+            return redirect()->route('setlistgroups.index')
+                ->with('success', 'Setlist Group Created successfully!');
         } else {
-            return redirect()->route('setlistgroups.create')->with('error' , 'Error creating Setlist Group');;
+            return redirect()->route('setlistgroups.create')
+                ->with('error' , 'Error creating Setlist Group');;
         }
     }
 
@@ -94,6 +98,27 @@ class SetlistGroupsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $songs = SongSonglist::where('setlist_group_id', $id)->get();
+        if($songs->count() > 0)
+        {
+            deleteSetlist($id);
+            if(deleteSetlistGroup($id))
+            {
+                return redirect()->route('setlistgroups.index')
+                ->with('success', 'Setlist Group deleted successfully!');
+            } else {
+                return redirect()->route('setlistgroups.index')
+                ->with('error', 'Error deleting Setlist Group');
+            }
+        } else {
+            if(deleteSetlistGroup($id))
+            {
+                return redirect()->route('setlistgroups.index')
+                ->with('success', 'Setlist Group deleted successfully!');
+            } else {
+                return redirect()->route('setlistgroups.index')
+                ->with('error', 'Error deleting Setlist Group');
+            }
+        }
     }
 }

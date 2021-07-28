@@ -2,8 +2,12 @@
     <div class="card-header bg-light">
         <div class="d-flex justify-content-between">
             <h3><strong>{{ $songs[0]->group->name }}</strong> - {{ $songs[0]->songlist->name }}</h3> 
+            <div class="d-flex justify-content-end">
+            <a href="/setlists/report/{{ $songs[0]->songlist->id }}" class="btn btn-secondary">
+                <i class="fas fa-list-ol"></i>  View</a>&nbsp;&nbsp;
             <a href="/setlistgroups" class="btn btn-secondary">
                 <i class="nav-icon far fa-hand-point-left"></i>  Back</a>
+        </div>
         </div>
     </div>
       <div class="card-body">

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Songlist;
 use App\Models\SongSonglist;
 use App\Models\Song;
+use Illuminate\Support\Arr;
+
 
 class SetlistsController extends Controller
 {
@@ -84,6 +86,32 @@ class SetlistsController extends Controller
         return view('setlists.show', ['listid' => $id]);       
     }
 
+    public function sort($id)
+    {
+        // $songs = SongSonglist::where('songlist_id', $id)
+        //     ->orderBy('position', 'asc')
+        //     ->get();
+        //dd($songs);
+
+        return view('setlists.sort', ['listid' => $id]);       
+    }
+
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function report($id)
+    {
+        $data = SongSonglist::where('songlist_id', $id)
+            ->orderby('position', 'asc')
+            ->get();        
+        return view('setlists.report', compact('data'));        
+
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -92,7 +120,11 @@ class SetlistsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $setlist = Songlist::where('id', $id)->first();
+        $group_id = $setlist->groups->id;
+        $setlist_items = SongSonglist::where('songlist_id', $id)->pluck('song_id')->toArray();
+        $songs = Song::orderby('name', 'asc')->get();
+        return view('setlists.edit', compact(['setlist', 'setlist_items', 'songs', 'group_id']));
     }
 
     /**
@@ -104,7 +136,32 @@ class SetlistsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+         $input = $request->all();
+
+        // Update the name, privacy fiels first.
+        $setlist = Songlist::findOrFail($id);
+        $setlist->update($input);
+        $result1 = $setlist;
+
+        $songs = $input['songlist'];
+        $songlist_db = SongSonglist::where('songlist_id', $id)->orderby('position', 'asc')->pluck('song_id')->toArray();
+        
+        for($i = 0; $i < count($songs); $i++) {
+            //dump(getSongname($songs[$i]));
+            if(!in_array($songs[$i], $songlist_db)) {
+                //dump("Add " . getSongname($songs[$i]) . " to DB");
+                $result2 = addToSetlist($input['groupId'], $input['setlistId'], $songs[$i]);
+            }
+        }
+
+        for($i = 0; $i < count($songlist_db); $i++) {
+            if(!in_array($songlist_db[$i], $songs)) {
+                $result2 = deleteFromSetlist($input['groupId'], $input['setlistId'], $songlist_db[$i]);
+                //dump("remove " . getSongname($songlist_db[$i]) . " from DB");
+            }
+        }
+        return redirect()->route('setlistgroups.index')
+                ->with('success', 'Setlist updated successfully!');
     }
 
     /**
@@ -115,6 +172,17 @@ class SetlistsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // Delete songs from set list
+        $songs = SongSonglist::where('songlist_id', $id)->get();
+        foreach($songs as $song) {
+
+            //dump($song->setlist_group_id . "  " . $song->songlist_id . " " . $song->song_id);
+            deleteFromSetlist($song->setlist_group_id, $song->songlist_id, $song->song_id);
+        }
+        //dd("End");
+        $setlist= Songlist::findOrFail($id);
+        $setlist->delete();
+        return redirect()->route('setlistgroups.index')
+                ->with('success', 'Setlist deleted successfully!');
     }
 }

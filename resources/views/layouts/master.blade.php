@@ -13,7 +13,7 @@
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
 
-    @include('partials.flash')
+    @include('sweetalert::alert')
     @include('partials.topnav')
     @include('partials.sidebar')
 
@@ -39,6 +39,5 @@
       @include('partials.footer')
       @livewireScripts
       <script src="https://cdn.jsdelivr.net/gh/livewire/sortable@v0.x.x/dist/livewire-sortable.js"></script>
-
 </body>
 </html>

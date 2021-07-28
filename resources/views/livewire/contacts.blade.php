@@ -2,7 +2,7 @@
 <div class="card">
     <div class="card-header bg-light">
         <div class="d-flex justify-content-between">
-            <h3>Songs</h3> 
+            <h3>Contacts</h3> 
             <a wire:click.prevent="showStatus('0')" href="#" class="btn btn-dark">All Contacts 
                 <span class="badge badge-light">{{ getContactTypeCount(0) }}</span>
             </a>
@@ -109,7 +109,7 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="artist" class="col-sm-2 col-form-label font-weight-bold">Artist:</label>
+                        <label for="artist" class="col-sm-2 col-form-label font-weight-bold">Address:</label>
                         <div class="col-sm-10">
                             <input wire:model="artist" class="form-control" id="artist">
                             @error('artist')
@@ -117,7 +117,7 @@
                             @enderror
                         </div>
                     </div>
-
+                    
                     <div class="form-group row">
                         <label for="artist" class="col-sm-2 col-form-label font-weight-bold">Status:</label>
                         <div class="col-sm-10">

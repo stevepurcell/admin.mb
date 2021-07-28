@@ -30,8 +30,15 @@ Route::group(['middleware' => 'auth'], function () {
         'uses' => '\App\Http\Controllers\SetlistsController@create'
     ]);
 
+    Route::get('setlists/report/{id}', [
+        'as' => 'setlists.report',
+        'uses' => '\App\Http\Controllers\SetlistsController@report'
+    ]);
+
     Route::resource('setlists', \App\Http\Controllers\SetlistsController::class, 
         ['except' => 'create']);
+        
+    Route::get('/setlists/{id}/sort', '\App\Http\Controllers\SetlistsController@sort')->name('setlists.sort');
 
     Route::resource('contacts', \App\Http\Controllers\ContactsController::class, 
         ['except' => 'show']);
